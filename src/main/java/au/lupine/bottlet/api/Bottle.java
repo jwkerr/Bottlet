@@ -1,8 +1,9 @@
-package au.lupine.bottlet.util;
+package au.lupine.bottlet.api;
 
 import au.lupine.bottlet.Bottlet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.CustomData;
 import org.bukkit.Material;
@@ -22,6 +23,8 @@ public final class Bottle {
 
     public static final NamespacedKey BOTTLET_STORED_EXPERIENCE = new NamespacedKey(Bottlet.instance(), "stored_experience");
     public static final NamespacedKey BOTTLET_SHOULD_THROW_BOTTLES = new NamespacedKey(Bottlet.instance(), "should_throw_bottles");
+
+    private Bottle() {}
 
     public static void give(@NonNull Player player, int quantity) {
         ItemStack bottles = new ItemStack(Material.EXPERIENCE_BOTTLE, quantity);
@@ -47,11 +50,11 @@ public final class Bottle {
 
         int level = Experience.level(experience);
         meta.lore(List.of(
-            Component.text("Stored experience: ", NamedTextColor.DARK_GRAY)
-                .append(Component.text(String.format("%,d", experience), NamedTextColor.GOLD))
-                .appendNewline()
-                .append(Component.text(level + " level" + (level != 1 ? "s" : ""), NamedTextColor.DARK_GRAY))
-        ));
+            Component.text(level + " level" + (level != 1 ? "s" : ""), NamedTextColor.GOLD)
+                .decoration(TextDecoration.ITALIC, false)
+                .append(Component.text(" (" + String.format("%,d", experience) + " experience)", NamedTextColor.DARK_GRAY, TextDecoration.ITALIC))
+            )
+        );
 
         bottles.setItemMeta(meta);
 
@@ -67,7 +70,7 @@ public final class Bottle {
     public static int stored(@NonNull ItemStack bottle) {
         if (!(bottle.getType() == Material.EXPERIENCE_BOTTLE)) return 0;
 
-        int defaultAmount = Bottlet.instance().config().root().node("bottle", "default_stored_experience_amount").getInt(10);
+        int defaultAmount = Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10);
 
         ItemMeta meta = bottle.getItemMeta();
         if (meta == null) return defaultAmount;

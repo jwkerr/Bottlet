@@ -1,16 +1,44 @@
 package au.lupine.bottlet;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import au.lupine.bottlet.base.Plugin;
+import au.lupine.bottlet.command.BottletCommand;
+import au.lupine.bottlet.listener.BottleListener;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import org.jspecify.annotations.NonNull;
 
-public final class Bottlet extends JavaPlugin {
+import java.util.List;
+import java.util.Map;
+
+public final class Bottlet extends Plugin {
+
+    private static Bottlet instance;
 
     @Override
-    public void onEnable() {
-        // Plugin startup logic
+    public void load() {
+        instance = this;
+
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            commands.registrar().register(BottletCommand.build(), List.of("bottle", "b", "xp", "exp", "experience", "xpm", "xpmanager"));
+        });
     }
 
     @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public void enable() {
+        listeners(
+            new BottleListener()
+        );
+    }
+
+    @Override
+    public @NonNull Map<String, Object> nodes() {
+        return Map.of(
+            "bottle", Map.of(
+                "default_stored_experience", 10
+            )
+        );
+    }
+
+    public static @NonNull Bottlet instance() {
+        return instance;
     }
 }

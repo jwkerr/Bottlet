@@ -1,10 +1,45 @@
 name: Bottlet
 description: $description
-version: '${version}'
+version: "$version"
 
 main: au.lupine.bottlet.Bottlet
-api-version: '1.21.11'
+api-version: "1.21.11"
 load: POSTWORLD
 
-authors: [ jwkerr ]
+authors: [jwkerr]
 website: https://lupine.au
+
+folia-supported: true
+
+libraries:
+  - org.spongepowered:configurate-gson:4.2.0
+
+permission:
+  bottlet.command.bottlet:
+    description: Grants access to the Bottlet command.
+    default: true
+
+  bottlet.command.bottlet.convert:
+    description: Grants access to the Bottlet convert command.
+    default: true
+
+  bottlet.command.bottlet.get:
+    description: Grants access to the Bottlet get command.
+    default: true
+
+  bottlet.command.bottlet.mend:
+    description: Grants access to the Bottlet mend command.
+    default: true
+
+  bottlet.command.bottlet.toggle:
+    description: Grants access to the Bottlet toggle command.
+    default: true
+
+  bottlet.command.bottlet.toggle.thrown:
+    description: Grants access to the Bottlet toggle thrown command.
+    default: true
+
+commands:
+  bottlet:
+    description: Command to interface with Bottlet.
+    permission: bottlet.command.bottlet

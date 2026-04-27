@@ -1,4 +1,4 @@
-package au.lupine.bottlet.util;
+package au.lupine.bottlet.api;
 
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
@@ -28,8 +28,8 @@ public final class Experience {
         return experience(player.getLevel()) + Math.round(required(player.getLevel()) * player.getExp());
     }
 
-    /// Set the total experience of the specified player.
-    public static void experience(@NonNull Player player, int experience) {
+    /// change the total experience of a player by the specified amount.
+    public static void change(@NonNull Player player, int experience) {
         experience += experience(player);
 
         if (experience < 0) experience = 0;
