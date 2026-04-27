@@ -1,0 +1,10 @@
+name: Bottlet
+description: $description
+version: '${version}'
+
+main: au.lupine.bottlet.Bottlet
+api-version: '1.21.11'
+load: POSTWORLD
+
+authors: [ jwkerr ]
+website: https://lupine.au
