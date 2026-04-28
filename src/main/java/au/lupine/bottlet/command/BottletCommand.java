@@ -111,13 +111,19 @@ public final class BottletCommand {
                     Player player = (Player) context.getSource().getSender();
 
                     ItemStack item = player.getInventory().getItemInMainHand();
+                    if (item.isEmpty()) {
+                        player.sendMessage(Component.translatable("bottlet.command.bottlet.mend.feedback.not_holding_item"));
+                        return 0;
+                    }
+
                     ItemMeta meta = item.getItemMeta();
 
+                    Component itemComponent = item.effectiveName().hoverEvent(item.asHoverEvent());
                     if (!(meta instanceof Damageable damageable) || !damageable.hasEnchant(Enchantment.MENDING)) {
                         player.sendMessage(
                             Component.translatable(
-                                "bottlet.command.bottlet.mend.feedback.invalid_item",
-                                Argument.component("item", item.effectiveName().colorIfAbsent(NamedTextColor.RED))
+                                "bottlet.command.bottlet.mend.feedback.item_not_repairable",
+                                Argument.component("item", itemComponent)
                             )
                         );
                         return 0;
@@ -128,7 +134,7 @@ public final class BottletCommand {
                         player.sendMessage(
                             Component.translatable(
                                 "bottlet.command.bottlet.mend.feedback.item_not_damaged",
-                                Argument.component("item", item.effectiveName().colorIfAbsent(NamedTextColor.RED))
+                                Argument.component("item", itemComponent)
                             )
                         );
                         return 0;
@@ -142,7 +148,7 @@ public final class BottletCommand {
                             Component.translatable(
                                 "bottlet.command.bottlet.mend.feedback.insufficient_experience",
                                 Argument.string("experience", Bottlet.pretty(cost)),
-                                Argument.component("item", item.effectiveName()),
+                                Argument.component("item", itemComponent),
                                 Argument.string("current", Bottlet.pretty(current))
                             )
                         );
