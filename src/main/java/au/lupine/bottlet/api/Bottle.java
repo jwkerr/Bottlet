@@ -50,9 +50,9 @@ public final class Bottle {
 
         int level = Experience.level(experience);
         meta.lore(List.of(
-            Component.text(level + " level" + (level != 1 ? "s" : ""), NamedTextColor.GOLD)
+            Component.text(Bottlet.pretty(level) + " level" + (level != 1 ? "s" : ""), NamedTextColor.GOLD)
                 .decoration(TextDecoration.ITALIC, false)
-                .append(Component.text(" (" + String.format("%,d", experience) + " experience)", NamedTextColor.DARK_GRAY, TextDecoration.ITALIC))
+                .append(Component.text(" (" + Bottlet.pretty(experience) + " experience)", NamedTextColor.GRAY, TextDecoration.ITALIC))
             )
         );
 

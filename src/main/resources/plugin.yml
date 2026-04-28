@@ -31,12 +31,24 @@ permission:
     description: Grants access to the Bottlet mend command.
     default: true
 
+  bottlet.command.bottlet.stats:
+    description: Grants access to the Bottlet stats command.
+    default: true
+
+  bottlet.command.bottlet.stats.other:
+    description: Grants access to view the Bottlet stats of other players.
+    default: false
+
   bottlet.command.bottlet.toggle:
     description: Grants access to the Bottlet toggle command.
     default: true
 
   bottlet.command.bottlet.toggle.thrown:
     description: Grants access to the Bottlet toggle thrown command.
+    default: true
+
+  bottlet.command.bottlet.until:
+    description: Grants access to the Bottlet until command.
     default: true
 
 commands:

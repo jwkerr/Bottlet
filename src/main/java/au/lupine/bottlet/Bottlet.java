@@ -41,4 +41,8 @@ public final class Bottlet extends Plugin {
     public static @NonNull Bottlet instance() {
         return instance;
     }
+
+    public static @NonNull String pretty(int number) {
+        return String.format("%,d", number);
+    }
 }
