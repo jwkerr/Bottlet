@@ -601,30 +601,4 @@ public final class BottletCommand {
             )
             .build();
     }
-
-    private static int get(@NonNull CommandContext<CommandSourceStack> context, int bottles) {
-        Player player = (Player) context.getSource().getSender();
-
-        int experience = bottles * Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10);
-        int current = Experience.experience(player);
-
-        if (experience > current || experience <= 0) {
-            player.sendMessage(
-                Component.translatable(
-                    "bottlet.command.bottlet.get.feedback.insufficient_experience",
-                    Argument.string("bottles", Bottlet.pretty(bottles)),
-                    Argument.tagResolver(Formatter.choice("bottle_count", bottles)),
-                    Argument.string("experience", Bottlet.pretty(experience)),
-                    Argument.string("current", Bottlet.pretty(current))
-                )
-            );
-            return 0;
-        }
-
-        Experience.change(player, -experience);
-
-        Bottle.give(player, bottles);
-
-        return Command.SINGLE_SUCCESS;
-    }
 }
