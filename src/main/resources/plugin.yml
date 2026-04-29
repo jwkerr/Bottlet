@@ -15,6 +15,14 @@ libraries:
   - org.spongepowered:configurate-gson:4.2.0
 
 permission:
+  bottlet.command.bottletadmin:
+    description: Grants access to the Bottlet Admin command.
+    default: false
+
+  bottlet.command.bottletadmin.give:
+    description: Grants access to the Bottlet Admin give command.
+    default: false
+
   bottlet.command.bottlet:
     description: Grants access to the Bottlet command.
     default: true

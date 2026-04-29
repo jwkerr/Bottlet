@@ -1,6 +1,7 @@
 package au.lupine.bottlet;
 
 import au.lupine.bottlet.base.Plugin;
+import au.lupine.bottlet.command.BottletAdminCommand;
 import au.lupine.bottlet.command.BottletCommand;
 import au.lupine.bottlet.listener.BottleListener;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -19,6 +20,7 @@ public final class Bottlet extends Plugin {
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
             commands.registrar().register(BottletCommand.build(), List.of("bottle", "b", "xp", "exp", "experience"));
+            commands.registrar().register(BottletAdminCommand.build(), List.of("bottleadmin", "ba", "xpadmin", "expadmin", "experienceadmin"));
         });
     }
 
