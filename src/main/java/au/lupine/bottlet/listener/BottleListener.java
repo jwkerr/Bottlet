@@ -26,7 +26,6 @@ public final class BottleListener implements Listener {
     public void on(@NonNull PlayerLaunchProjectileEvent event) {
         if (!(event.getProjectile() instanceof ThrownExpBottle thrown)) return;
 
-        // add thrown toggle
         if (Bottle.thrown(event.getPlayer())) return;
 
         event.setCancelled(true);
