@@ -26,6 +26,10 @@ public final class Bottle {
 
     private Bottle() {}
 
+    /// Give a player the specified quantity of standard experience bottles.
+    /// Any bottles that could not fit will be dropped to the floor at the player's feet.
+    /// @param player The player to receive these bottles.
+    /// @param bottles The quantity of bottles in the stack.
     public static void give(@NonNull Player player, int bottles) {
         ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE, bottles);
 
@@ -38,6 +42,11 @@ public final class Bottle {
             );
     }
 
+    /// Give a player the specified quantity of experience bottles with the specified quantity of experience per each.
+    /// Any bottles that could not fit will be dropped to the floor at the player's feet.
+    /// @param player The player to receive these bottles.
+    /// @param experience The amount of experience per bottle.
+    /// @param bottles The quantity of bottles in the stack.
     public static void give(@NonNull Player player, int experience, int bottles) {
         ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE, bottles);
 
@@ -67,6 +76,7 @@ public final class Bottle {
             );
     }
 
+    /// @return The stored experience in the specified bottle. Returns 0 if the item is not an experience bottle.
     public static int stored(@NonNull ItemStack bottle) {
         if (!(bottle.getType() == Material.EXPERIENCE_BOTTLE)) return 0;
 
@@ -80,6 +90,7 @@ public final class Bottle {
         Integer amount = pdc.get(BOTTLET_STORED_EXPERIENCE, PersistentDataType.INTEGER);
         if (amount != null) return amount;
 
+        // XPManager compatibility: https://github.com/jwkerr/XPManager
         amount = pdc.get(new NamespacedKey("xpmanager", "xpmanager-store-amount"), PersistentDataType.INTEGER);
         if (amount != null) return amount;
 
@@ -89,12 +100,14 @@ public final class Bottle {
 
             if (data == null) return defaultAmount;
 
+            // BottledExp compatibility: https://www.spigotmc.org/resources/bottledexp.2815/
             return data.copyTag().getInt("StoredBottledExp").orElse(defaultAmount);
         } catch (Throwable throwable) {
             return defaultAmount;
         }
     }
 
+    /// @return Whether this player throws their experience bottles or immediately consumes them.
     public static boolean thrown(@NonNull Player player) {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
 
