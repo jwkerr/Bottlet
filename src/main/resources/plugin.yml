@@ -71,3 +71,7 @@ commands:
   bottlet:
     description: Command to interface with Bottlet.
     permission: bottlet.command.bottlet
+
+  bottletadmin:
+    description: Command to interface with Bottlet as an admin.
+    permission: bottlet.command.bottletadmin
