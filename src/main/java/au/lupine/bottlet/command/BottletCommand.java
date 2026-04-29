@@ -83,25 +83,60 @@ public final class BottletCommand {
 
                         int defaultExperience = Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10);
 
-                        int experience = Experience.experience(player);
-                        if (experience < defaultExperience) {
+                        int current = Experience.experience(player);
+                        if (current < defaultExperience) {
                             player.sendMessage(
                                 Component.translatable(
                                     "bottlet.command.bottlet.get.max.feedback.insufficient_experience",
                                     Argument.string("experience", Bottlet.pretty(defaultExperience)),
-                                    Argument.string("current", Bottlet.pretty(defaultExperience))
+                                    Argument.string("current", Bottlet.pretty(current))
                                 )
                             );
                             return 0;
                         }
 
-                        int quantity = experience / defaultExperience;
+                        int bottles = current / defaultExperience;
+                        int total = bottles * defaultExperience;
 
-                        return get(context, quantity);
+                        Bottle.give(player, bottles);
+                        Experience.change(player, -total);
+
+                        return Command.SINGLE_SUCCESS;
                     })
                 )
-                .then(Commands.argument("quantity", IntegerArgumentType.integer(1))
-                    .executes(context -> get(context, context.getArgument("quantity", Integer.class)))
+                .then(Commands.argument("bottles", IntegerArgumentType.integer(1))
+                    .executes(context -> {
+                        Player player = (Player) context.getSource().getSender();
+
+                        int bottles = context.getArgument("bottles", Integer.class);
+
+                        int total;
+                        try {
+                            total = Math.multiplyExact(bottles, Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10));
+                        } catch (ArithmeticException e) {
+                            player.sendMessage(Component.translatable("bottlet.command.bottlet.get.feedback.integer_overflow"));
+                            return 0;
+                        }
+
+                        int current = Experience.experience(player);
+                        if (total > current) {
+                            player.sendMessage(
+                                Component.translatable(
+                                    "bottlet.command.bottlet.get.feedback.insufficient_experience",
+                                    Argument.string("bottles", Bottlet.pretty(bottles)),
+                                    Argument.tagResolver(Formatter.choice("bottle_count", bottles)),
+                                    Argument.string("experience", Bottlet.pretty(total)),
+                                    Argument.string("current", Bottlet.pretty(current))
+                                )
+                            );
+                            return 0;
+                        }
+
+                        Bottle.give(player, bottles);
+                        Experience.change(player, -total);
+
+                        return Command.SINGLE_SUCCESS;
+                    })
                 )
             )
             .then(Commands.literal("mend")
@@ -285,7 +320,7 @@ public final class BottletCommand {
 
                             int experience = Experience.experience(player);
                             if (experience == 0) {
-                                player.sendMessage(Component.translatable("bottlet.command.bottlet.store.experience.max.no_experience"));
+                                player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.experience.max.no_experience"));
                                 return 0;
                             }
 
@@ -304,7 +339,7 @@ public final class BottletCommand {
                             if (experience > current) {
                                 player.sendMessage(
                                     Component.translatable(
-                                        "bottlet.command.bottlet.store.insufficient_experience",
+                                        "bottlet.command.bottlet.store.feedback.insufficient_experience",
                                         Argument.string("experience", Bottlet.pretty(experience)),
                                         Argument.string("current", Bottlet.pretty(current))
                                     )
@@ -328,7 +363,7 @@ public final class BottletCommand {
                                 try {
                                     total = Math.multiplyExact(experience, bottles);
                                 } catch (ArithmeticException e) {
-                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.store.integer_overflow"));
+                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.integer_overflow"));
                                     return 0;
                                 }
 
@@ -336,7 +371,7 @@ public final class BottletCommand {
                                 if (total > current) {
                                     player.sendMessage(
                                         Component.translatable(
-                                            "bottlet.command.bottlet.store.insufficient_experience",
+                                            "bottlet.command.bottlet.store.feedback.insufficient_experience",
                                             Argument.string("experience", Bottlet.pretty(total)),
                                             Argument.string("current", Bottlet.pretty(current))
                                         )
@@ -359,7 +394,7 @@ public final class BottletCommand {
                                 if (current < experience) {
                                     player.sendMessage(
                                         Component.translatable(
-                                            "bottlet.command.bottlet.store.insufficient_experience",
+                                            "bottlet.command.bottlet.store.feedback.insufficient_experience",
                                             Argument.string("experience", Bottlet.pretty(experience)),
                                             Argument.string("current", Bottlet.pretty(current))
                                         )
@@ -385,7 +420,7 @@ public final class BottletCommand {
 
                             int experience = Experience.experience(player);
                             if (experience == 0) {
-                                player.sendMessage(Component.translatable("bottlet.command.bottlet.store.levels.max.no_levels"));
+                                player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.levels.max.no_levels"));
                                 return 0;
                             }
 
@@ -406,7 +441,7 @@ public final class BottletCommand {
                             if (experience > current) {
                                 player.sendMessage(
                                     Component.translatable(
-                                        "bottlet.command.bottlet.store.insufficient_experience",
+                                        "bottlet.command.bottlet.store.feedback.insufficient_experience",
                                         Argument.string("experience", Bottlet.pretty(experience)),
                                         Argument.string("current", Bottlet.pretty(current))
                                     )
@@ -432,7 +467,7 @@ public final class BottletCommand {
                                 try {
                                     total = Math.multiplyExact(experience, bottles);
                                 } catch (ArithmeticException e) {
-                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.store.integer_overflow"));
+                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.integer_overflow"));
                                     return 0;
                                 }
 
@@ -440,7 +475,7 @@ public final class BottletCommand {
                                 if (total > current) {
                                     player.sendMessage(
                                         Component.translatable(
-                                            "bottlet.command.bottlet.store.insufficient_experience",
+                                            "bottlet.command.bottlet.store.feedback.insufficient_experience",
                                             Argument.string("experience", Bottlet.pretty(total)),
                                             Argument.string("current", Bottlet.pretty(current))
                                         )
@@ -465,7 +500,7 @@ public final class BottletCommand {
                                 if (current < experience) {
                                     player.sendMessage(
                                         Component.translatable(
-                                            "bottlet.command.bottlet.store.insufficient_experience",
+                                            "bottlet.command.bottlet.store.feedback.insufficient_experience",
                                             Argument.string("experience", Bottlet.pretty(experience)),
                                             Argument.string("current", Bottlet.pretty(current))
                                         )
@@ -567,18 +602,18 @@ public final class BottletCommand {
             .build();
     }
 
-    private static int get(@NonNull CommandContext<CommandSourceStack> context, int quantity) {
+    private static int get(@NonNull CommandContext<CommandSourceStack> context, int bottles) {
         Player player = (Player) context.getSource().getSender();
 
-        int experience = quantity * Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10);
+        int experience = bottles * Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10);
         int current = Experience.experience(player);
 
         if (experience > current || experience <= 0) {
             player.sendMessage(
                 Component.translatable(
                     "bottlet.command.bottlet.get.feedback.insufficient_experience",
-                    Argument.string("bottles", Bottlet.pretty(quantity)),
-                    Argument.tagResolver(Formatter.choice("bottle_count", quantity)),
+                    Argument.string("bottles", Bottlet.pretty(bottles)),
+                    Argument.tagResolver(Formatter.choice("bottle_count", bottles)),
                     Argument.string("experience", Bottlet.pretty(experience)),
                     Argument.string("current", Bottlet.pretty(current))
                 )
@@ -588,7 +623,7 @@ public final class BottletCommand {
 
         Experience.change(player, -experience);
 
-        Bottle.give(player, quantity);
+        Bottle.give(player, bottles);
 
         return Command.SINGLE_SUCCESS;
     }
