@@ -7,6 +7,7 @@ import org.jspecify.annotations.NonNull;
 @SuppressWarnings("UnstableApiUsage")
 public final class ExperienceDialog {
 
+    // TODO: add interface for getting bottles
     public void open(@NonNull Player player) {
         Dialog.create(builder -> builder.empty()
             .base()
