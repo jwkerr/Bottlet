@@ -27,7 +27,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public final class BottletCommand {
 
     public static @NonNull LiteralCommandNode<CommandSourceStack> build() {
