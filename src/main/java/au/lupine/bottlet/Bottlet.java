@@ -18,7 +18,7 @@ public final class Bottlet extends Plugin {
         instance = this;
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            commands.registrar().register(BottletCommand.build(), List.of("bottle", "b", "xp", "exp", "experience", "xpm", "xpmanager"));
+            commands.registrar().register(BottletCommand.build(), List.of("bottle", "b", "xp", "exp", "experience"));
         });
     }
 
