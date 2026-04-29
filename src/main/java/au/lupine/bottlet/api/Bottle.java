@@ -26,10 +26,10 @@ public final class Bottle {
 
     private Bottle() {}
 
-    public static void give(@NonNull Player player, int quantity) {
-        ItemStack bottles = new ItemStack(Material.EXPERIENCE_BOTTLE, quantity);
+    public static void give(@NonNull Player player, int bottles) {
+        ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE, bottles);
 
-        HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(bottles);
+        HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(stack);
 
         remaining.values()
             .forEach(item -> player
@@ -38,10 +38,10 @@ public final class Bottle {
             );
     }
 
-    public static void give(@NonNull Player player, int experience, int quantity) {
-        ItemStack bottles = new ItemStack(Material.EXPERIENCE_BOTTLE, quantity);
+    public static void give(@NonNull Player player, int experience, int bottles) {
+        ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE, bottles);
 
-        ItemMeta meta = bottles.getItemMeta();
+        ItemMeta meta = stack.getItemMeta();
         meta.getPersistentDataContainer().set(
             BOTTLET_STORED_EXPERIENCE,
             PersistentDataType.INTEGER,
@@ -56,9 +56,9 @@ public final class Bottle {
             )
         );
 
-        bottles.setItemMeta(meta);
+        stack.setItemMeta(meta);
 
-        HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(bottles);
+        HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(stack);
 
         remaining.values()
             .forEach(item -> player

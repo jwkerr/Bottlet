@@ -19,7 +19,7 @@ public final class Experience {
     /// @return The experience equivalent to the specified level.
     public static int experience(int level) {
         if (level > 30) return (int) (4.5 * level * level - 162.5 * level + 2220);
-        if (level > 15) return (int) (2.5 * level * level -40.5 * level + 360);
+        if (level > 15) return (int) (2.5 * level * level - 40.5 * level + 360);
         return level * level + 6 * level;
     }
 
