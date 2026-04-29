@@ -5,7 +5,6 @@ import au.lupine.bottlet.api.Bottle;
 import au.lupine.bottlet.api.Experience;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -177,22 +176,18 @@ public final class BottletCommand {
                     int cost = (int) Math.ceil((double) damage / 2); // https://minecraft.wiki/w/Mending#Usage
                     int current = Experience.experience(player);
 
-                    if (!(current >= cost)) {
-                        player.sendMessage(
-                            Component.translatable(
-                                "bottlet.command.bottlet.mend.feedback.insufficient_experience",
-                                Argument.string("experience", Bottlet.pretty(cost)),
-                                Argument.component("item", itemComponent),
-                                Argument.string("current", Bottlet.pretty(current))
-                            )
-                        );
+                    if (current == 0) {
+                        player.sendMessage(Component.translatable("bottlet.command.bottlet.mend.feedback.insufficient_experience"));
                         return 0;
                     }
 
-                    damageable.setDamage(0);
+                    int spent = Math.max(current, cost);
+                    int repaired = Math.max(spent * 2, damage);
+
+                    damageable.setDamage(damage - repaired);
                     item.setItemMeta(damageable);
 
-                    Experience.change(player, -cost);
+                    Experience.change(player, -spent);
 
                     return Command.SINGLE_SUCCESS;
                 })
