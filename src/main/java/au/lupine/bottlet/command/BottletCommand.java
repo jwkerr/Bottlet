@@ -181,8 +181,8 @@ public final class BottletCommand {
                         return 0;
                     }
 
-                    int spent = Math.max(current, cost);
-                    int repaired = Math.max(spent * 2, damage);
+                    int spent = Math.min(current, cost);
+                    int repaired = Math.min(spent * 2, damage);
 
                     damageable.setDamage(damage - repaired);
                     item.setItemMeta(damageable);
