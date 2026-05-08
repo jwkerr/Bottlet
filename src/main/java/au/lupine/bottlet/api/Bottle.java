@@ -78,7 +78,7 @@ public final class Bottle {
 
     /// @return The stored experience in the specified bottle. Returns 0 if the item is not an experience bottle.
     public static int stored(@NonNull ItemStack bottle) {
-        if (!(bottle.getType() == Material.EXPERIENCE_BOTTLE)) return 0;
+        if (bottle.getType() != Material.EXPERIENCE_BOTTLE) return 0;
 
         int defaultAmount = Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10);
 
