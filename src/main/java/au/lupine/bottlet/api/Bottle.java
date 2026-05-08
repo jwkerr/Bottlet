@@ -71,7 +71,7 @@ public final class Bottle {
         });
     }
 
-    private static List<ItemStack> split(@NonNull ItemStack stack, int bottles) {
+    private static @NonNull List<ItemStack> split(@NonNull ItemStack stack, int bottles) {
         List<ItemStack> stacks = new ArrayList<>();
 
         while (bottles > 0) {
