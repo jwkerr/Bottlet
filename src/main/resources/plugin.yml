@@ -14,7 +14,7 @@ folia-supported: true
 libraries:
   - org.spongepowered:configurate-gson:4.2.0
 
-permission:
+permissions:
   bottlet.command.bottletadmin:
     description: Grants access to the Bottlet Admin command.
     default: false
