@@ -69,6 +69,14 @@ public final class BottletCommand {
                     }
 
                     Bottle.give(player, experience, 1);
+                    player.sendMessage(
+                        Component.translatable(
+                            "bottlet.command.bottlet.convert.feedback.success",
+                            Argument.string("bottles", Bottlet.pretty(bottles)),
+                            Argument.tagResolver(Formatter.choice("bottle_count", bottles)),
+                            Argument.string("experience", Bottlet.pretty(experience))
+                        )
+                    );
 
                     return Command.SINGLE_SUCCESS;
                 })
@@ -99,6 +107,14 @@ public final class BottletCommand {
                         Bottle.give(player, bottles);
                         Experience.change(player, -total);
 
+                        player.sendMessage(
+                            Component.translatable(
+                                "bottlet.command.bottlet.get.feedback.success",
+                                Argument.string("bottles", Bottlet.pretty(bottles)),
+                                Argument.tagResolver(Formatter.choice("bottle_count", bottles))
+                            )
+                        );
+
                         return Command.SINGLE_SUCCESS;
                     })
                 )
@@ -112,7 +128,7 @@ public final class BottletCommand {
                         try {
                             total = Math.multiplyExact(bottles, Bottlet.instance().config().root().node("bottle", "default_stored_experience").getInt(10));
                         } catch (ArithmeticException e) {
-                            player.sendMessage(Component.translatable("bottlet.command.bottlet.get.feedback.integer_overflow"));
+                            player.sendMessage(Component.translatable("bottlet.command.bottlet.feedback.integer_overflow"));
                             return 0;
                         }
 
@@ -132,6 +148,14 @@ public final class BottletCommand {
 
                         Bottle.give(player, bottles);
                         Experience.change(player, -total);
+
+                        player.sendMessage(
+                            Component.translatable(
+                                "bottlet.command.bottlet.get.feedback.success",
+                                Argument.string("bottles", Bottlet.pretty(bottles)),
+                                Argument.tagResolver(Formatter.choice("bottle_count", bottles))
+                            )
+                        );
 
                         return Command.SINGLE_SUCCESS;
                     })
@@ -188,6 +212,14 @@ public final class BottletCommand {
 
                     Experience.change(player, -spent);
 
+                    player.sendMessage(
+                        Component.translatable(
+                            "bottlet.command.bottlet.mend.feedback.success",
+                            Argument.component("item", itemComponent),
+                            Argument.string("experience", Bottlet.pretty(spent))
+                        )
+                    );
+
                     return Command.SINGLE_SUCCESS;
                 })
                 .then(Commands.literal("all")
@@ -239,6 +271,15 @@ public final class BottletCommand {
                         }
 
                         Experience.change(player, -cost);
+
+                        player.sendMessage(
+                            Component.translatable(
+                                "bottlet.command.bottlet.mend.all.feedback.success",
+                                Argument.string("items", Bottlet.pretty(mendable.size())),
+                                Argument.tagResolver(Formatter.choice("item_count", mendable.size())),
+                                Argument.string("experience", Bottlet.pretty(cost))
+                            )
+                        );
 
                         return Command.SINGLE_SUCCESS;
                     })
@@ -313,12 +354,19 @@ public final class BottletCommand {
 
                         int experience = Experience.experience(player);
                         if (experience == 0) {
-                            player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.experience.max.no_experience"));
+                            player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.max.no_experience"));
                             return 0;
                         }
 
                         Bottle.give(player, experience, 1);
                         Experience.change(player, -experience);
+
+                        player.sendMessage(
+                            Component.translatable(
+                                "bottlet.command.store.single_bottle.feedback.success",
+                                Argument.string("experience", Bottlet.pretty(experience))
+                            )
+                        );
 
                         return Command.SINGLE_SUCCESS;
                     })
@@ -344,6 +392,13 @@ public final class BottletCommand {
                             Bottle.give(player, experience, 1);
                             Experience.change(player, -experience);
 
+                            player.sendMessage(
+                                Component.translatable(
+                                    "bottlet.command.store.single_bottle.feedback.success",
+                                    Argument.string("experience", Bottlet.pretty(experience))
+                                )
+                            );
+
                             return Command.SINGLE_SUCCESS;
                         })
                         .then(Commands.argument("bottles", IntegerArgumentType.integer(1))
@@ -357,7 +412,7 @@ public final class BottletCommand {
                                 try {
                                     total = Math.multiplyExact(experience, bottles);
                                 } catch (ArithmeticException e) {
-                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.integer_overflow"));
+                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.feedback.integer_overflow"));
                                     return 0;
                                 }
 
@@ -375,6 +430,24 @@ public final class BottletCommand {
 
                                 Bottle.give(player, experience, bottles);
                                 Experience.change(player, -total);
+
+                                if (bottles == 1) {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.single_bottle.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(experience))
+                                        )
+                                    );
+                                } else {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.multiple_bottles.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(total)),
+                                            Argument.string("bottles", Bottlet.pretty(bottles)),
+                                            Argument.tagResolver(Formatter.choice("bottle_count", bottles))
+                                        )
+                                    );
+                                }
 
                                 return Command.SINGLE_SUCCESS;
                             })
@@ -401,6 +474,24 @@ public final class BottletCommand {
 
                                 Bottle.give(player, experience, bottles);
                                 Experience.change(player, -total);
+
+                                if (bottles == 1) {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.single_bottle.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(experience))
+                                        )
+                                    );
+                                } else {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.multiple_bottles.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(total)),
+                                            Argument.string("bottles", Bottlet.pretty(bottles)),
+                                            Argument.tagResolver(Formatter.choice("bottle_count", bottles))
+                                        )
+                                    );
+                                }
 
                                 return Command.SINGLE_SUCCESS;
                             })
@@ -430,6 +521,13 @@ public final class BottletCommand {
                             Bottle.give(player, experience, 1);
                             Experience.change(player, -experience);
 
+                            player.sendMessage(
+                                Component.translatable(
+                                    "bottlet.command.store.single_bottle.feedback.success",
+                                    Argument.string("experience", Bottlet.pretty(experience))
+                                )
+                            );
+
                             return Command.SINGLE_SUCCESS;
                         })
                         .then(Commands.argument("bottles", IntegerArgumentType.integer(1))
@@ -445,7 +543,7 @@ public final class BottletCommand {
                                 try {
                                     total = Math.multiplyExact(experience, bottles);
                                 } catch (ArithmeticException e) {
-                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.integer_overflow"));
+                                    player.sendMessage(Component.translatable("bottlet.command.bottlet.feedback.integer_overflow"));
                                     return 0;
                                 }
 
@@ -463,6 +561,24 @@ public final class BottletCommand {
 
                                 Bottle.give(player, experience, bottles);
                                 Experience.change(player, -total);
+
+                                if (bottles == 1) {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.single_bottle.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(experience))
+                                        )
+                                    );
+                                } else {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.multiple_bottles.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(total)),
+                                            Argument.string("bottles", Bottlet.pretty(bottles)),
+                                            Argument.tagResolver(Formatter.choice("bottle_count", bottles))
+                                        )
+                                    );
+                                }
 
                                 return Command.SINGLE_SUCCESS;
                             })
@@ -491,6 +607,24 @@ public final class BottletCommand {
 
                                 Bottle.give(player, experience, bottles);
                                 Experience.change(player, -total);
+
+                                if (bottles == 1) {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.single_bottle.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(experience))
+                                        )
+                                    );
+                                } else {
+                                    player.sendMessage(
+                                        Component.translatable(
+                                            "bottlet.command.store.multiple_bottles.feedback.success",
+                                            Argument.string("experience", Bottlet.pretty(total)),
+                                            Argument.string("bottles", Bottlet.pretty(bottles)),
+                                            Argument.tagResolver(Formatter.choice("bottle_count", bottles))
+                                        )
+                                    );
+                                }
 
                                 return Command.SINGLE_SUCCESS;
                             })
