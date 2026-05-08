@@ -16,6 +16,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,15 +32,12 @@ public final class Bottle {
     /// @param player The player to receive these bottles.
     /// @param bottles The quantity of bottles in the stack.
     public static void give(@NonNull Player player, int bottles) {
-        ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE, bottles);
+        ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE);
 
-        HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(stack);
-
-        remaining.values()
-            .forEach(item -> player
-                .getWorld()
-                .dropItem(player.getLocation(), item)
-            );
+        split(stack, bottles).forEach(s -> {
+            HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(s);
+            remaining.values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
+        });
     }
 
     /// Give a player the specified quantity of experience bottles with the specified quantity of experience per each.
@@ -48,7 +46,7 @@ public final class Bottle {
     /// @param experience The amount of experience per bottle.
     /// @param bottles The quantity of bottles in the stack.
     public static void give(@NonNull Player player, int experience, int bottles) {
-        ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE, bottles);
+        ItemStack stack = new ItemStack(Material.EXPERIENCE_BOTTLE);
 
         ItemMeta meta = stack.getItemMeta();
         meta.getPersistentDataContainer().set(
@@ -67,13 +65,27 @@ public final class Bottle {
 
         stack.setItemMeta(meta);
 
-        HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(stack);
+        split(stack, bottles).forEach(s -> {
+            HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(s);
+            remaining.values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
+        });
+    }
 
-        remaining.values()
-            .forEach(item -> player
-                .getWorld()
-                .dropItem(player.getLocation(), item)
-            );
+    private static List<ItemStack> split(@NonNull ItemStack stack, int bottles) {
+        List<ItemStack> stacks = new ArrayList<>();
+
+        while (bottles > 0) {
+            int count = Math.min(bottles, stack.getMaxStackSize());
+
+            ItemStack clone = stack.clone();
+            clone.setAmount(count);
+
+            stacks.add(clone);
+
+            bottles -= count;
+        }
+
+        return stacks;
     }
 
     /// @return The stored experience in the specified bottle. Returns 0 if the item is not an experience bottle.
