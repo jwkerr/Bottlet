@@ -307,23 +307,23 @@ public final class BottletCommand {
             )
             .then(Commands.literal("store")
                 .requires(source -> source.getSender().hasPermission("bottlet.command.bottlet.store") && source.getSender() instanceof Player)
+                .then(Commands.literal("max")
+                    .executes(context -> {
+                        Player player = (Player) context.getSource().getSender();
+
+                        int experience = Experience.experience(player);
+                        if (experience == 0) {
+                            player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.experience.max.no_experience"));
+                            return 0;
+                        }
+
+                        Bottle.give(player, experience, 1);
+                        Experience.change(player, -experience);
+
+                        return Command.SINGLE_SUCCESS;
+                    })
+                )
                 .then(Commands.literal("experience")
-                    .then(Commands.literal("max")
-                        .executes(context -> {
-                            Player player = (Player) context.getSource().getSender();
-
-                            int experience = Experience.experience(player);
-                            if (experience == 0) {
-                                player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.experience.max.no_experience"));
-                                return 0;
-                            }
-
-                            Bottle.give(player, experience, 1);
-                            Experience.change(player, -experience);
-
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
                     .then(Commands.argument("experience", IntegerArgumentType.integer(1))
                         .executes(context -> {
                             Player player = (Player) context.getSource().getSender();
@@ -408,22 +408,6 @@ public final class BottletCommand {
                     )
                 )
                 .then(Commands.literal("levels")
-                    .then(Commands.literal("max")
-                        .executes(context -> {
-                            Player player = (Player) context.getSource().getSender();
-
-                            int experience = Experience.experience(player);
-                            if (experience == 0) {
-                                player.sendMessage(Component.translatable("bottlet.command.bottlet.store.feedback.levels.max.no_levels"));
-                                return 0;
-                            }
-
-                            Bottle.give(player, experience, 1);
-                            Experience.change(player, -experience);
-
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
                     .then(Commands.argument("levels", IntegerArgumentType.integer(1))
                         .executes(context -> {
                             Player player = (Player) context.getSource().getSender();
